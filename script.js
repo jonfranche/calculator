@@ -14,6 +14,16 @@ function divide(num1, num2) {
     return num1 / num2;
 }
 
+function equals() {
+    if (num[0] != undefined && oprtr != undefined) {
+        num.push(Number(display.textContent));
+        let result = Number(operate(oprtr, num));
+        display.textContent = '';
+        writeToDisplay(result);
+        clearStack();
+    }
+}
+
 function operationSelector(operator, num1, num2) {
     switch(operator) {
         case '+':
@@ -68,8 +78,18 @@ function clearStack() {
     oprtr = [];
 }
 
-function writeNumber(num) {
-    (display.textContent.length <= 11) ? writeToDisplay(element.textContent) : writeToDisplay('');
+function keyInput(event) {
+    if (event.key >= '0' && event.key <= '9') {
+        writeToDisplay(event.key);
+    }
+    else if (event.key == '+' || event.key == '-' || event.key == '*' || event.code == 'Slash') {
+        num.push(Number(display.textContent));
+        oprtr.push(event.key);
+        display.textContent = 0;
+    }
+    else if(event.key == '=' || event.key == 'Enter') {
+        equals();
+    }
 }
 
 const display = document.querySelector("#input");
@@ -91,6 +111,8 @@ bttnArr.forEach(element => {
         writeToDisplay(element.textContent) : writeToDisplay(''));
 });
 
+window.addEventListener("keydown", event  => {keyInput(event)});
+
 opBttnArr.forEach(element => {
     element.addEventListener('click', () => {
         num.push(Number(display.textContent));
@@ -104,7 +126,7 @@ clr.addEventListener('click', () => {
     display.textContent = 0;
 });
 
-equalsBtn.addEventListener('click', () => {
+/*equalsBtn.addEventListener('click', () => {
     if (num[0] != undefined && oprtr != undefined) {
         num.push(Number(display.textContent));
         let result = Number(operate(oprtr, num));
@@ -112,7 +134,9 @@ equalsBtn.addEventListener('click', () => {
         writeToDisplay(result);
         clearStack();
     }
-});
+});*/
+
+equalsBtn.addEventListener('click', () => {equals()});
 
 decimal.addEventListener('click', () => (display.textContent.length <= 11) ?
     writeToDisplay('.') : writeToDisplay(''));
